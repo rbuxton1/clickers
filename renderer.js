@@ -8,7 +8,7 @@ document.getElementById('optb').innerHTML = b;
 document.getElementById('optc').innerHTML = c;
 document.getElementById('optd').innerHTML = d;
 document.getElementById('opte').innerHTML = e;
-document.getElementById('addr').innerHTML = "Voting interface running on: " + ip.address();
+document.getElementById('addr').innerHTML = "Voting interface running on: " + ip.address() + ":8080!<br><i>This is the address to give students!</i>";
 //const ipcRenderer = require('electron').ipcRenderer
 //console.log("Votes: " + remote.getGlobal('votesA') + " " + global.votesA) // prints "pong"
 
@@ -61,6 +61,6 @@ expressApp.get("/votee", function(req, res){
   document.getElementById('opte').innerHTML = e;
 })
 
-expressApp.listen(8181, function(){
+expressApp.listen(8080, function(){
   console.log("Started web interface!")
 })
