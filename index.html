@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Clickers</title>
+  </head>
+  <body>
+    <center class="w3-light-grey">
+      <p id="addr"></p>
+      <div class="w3-card-2 w3-center" style="width:300px;">
+        <header class="w3-container w3-blue">
+          <h1> Results </h1>
+        </header>
+        <table class="w3-table-all w3-center">
+          <tr>
+            <th>Option</th>
+            <th>Votes</th>
+          </tr>
+          <tr>
+            <td>Option A</td>
+            <td><p id="opta"></p></td>
+          </tr>
+          <tr>
+            <td>Option B</td>
+            <td><p id="optb"></p></td>
+          </tr>
+          <tr>
+            <td>Option C</td>
+            <td><p id="optc"></p></td>
+          </tr>
+          <tr>
+            <td>Option D</td>
+            <td><p id="optd"></p></td>
+          </tr>
+          <tr>
+            <td>Option E</td>
+            <td><p id="opte"></p></td>
+          </tr>
+        </table>
+        <button class="w3-button w3-red" type="button" name="button" onclick="resetcounts()">Reset votes</button>
+      </div>
+      <br>
+    </center>
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+  </body>
+</html>
