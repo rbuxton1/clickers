@@ -2,6 +2,77 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 
+//new Squirrel stuff
+if (require('electron-squirrel-startup')) return;
+
+// this should be placed at top of main.js to handle setup events quickly
+if (handleSquirrelEvent()) {
+  // squirrel event handled and app will exit in 1000ms, so don't do anything else
+  return;
+}
+
+function handleSquirrelEvent() {
+  if (process.argv.length === 1) {
+    return false;
+  }
+
+  const ChildProcess = require('child_process');
+  const path = require('path');
+
+  const appFolder = path.resolve(process.execPath, '..');
+  const rootAtomFolder = path.resolve(appFolder, '..');
+  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+  const exeName = path.basename(process.execPath);
+
+  const spawn = function(command, args) {
+    let spawnedProcess, error;
+
+    try {
+      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+    } catch (error) {}
+
+    return spawnedProcess;
+  };
+
+  const spawnUpdate = function(args) {
+    return spawn(updateDotExe, args);
+  };
+
+  const squirrelEvent = process.argv[1];
+  switch (squirrelEvent) {
+    case '--squirrel-install':
+    case '--squirrel-updated':
+      // Optionally do things such as:
+      // - Add your .exe to the PATH
+      // - Write to the registry for things like file associations and
+      //   explorer context menus
+
+      // Install desktop and start menu shortcuts
+      spawnUpdate(['--createShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-uninstall':
+      // Undo anything you did in the --squirrel-install and
+      // --squirrel-updated handlers
+
+      // Remove desktop and start menu shortcuts
+      spawnUpdate(['--removeShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-obsolete':
+      // This is called on the outgoing version of your app before
+      // we update to the new version - it's the opposite of
+      // --squirrel-updated
+
+      app.quit();
+      return true;
+  }
+};
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -49,55 +120,3 @@ app.on('activate', function () {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow()
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-/*global.votesA = 0;
-global.votesB = 0;
-global.votesC = 0;
-global.votesD = 0;
-global.votesE = 0;
-
-const express = require("express");
-const expressApp = express();
-expressApp.set('view engine', 'ejs')
-
-const ipcMain = require('electron').ipcMain
-
-expressApp.get("/", function(req, res){
-  res.render("vote")
-})
-
-expressApp.get("/votea", function(req, res){
-  global.votesA++;
-  res.render("vote")
-  console.log(global.votesA)
-})
-expressApp.post("/voteb", function(req, res){
-  global.votesB++;
-  res.render("vote")
-})
-expressApp.post("/votec", function(req, res){
-  global.votesC++;
-  res.render("vote")
-})
-expressApp.post("/voted", function(req, res){
-  global.votesD++;
-  res.render("vote")
-})
-expressApp.post("/votee", function(req, res){
-  global.votesE++;
-  res.render("vote")
-})
-
-expressApp.listen(8181, function(){
-  console.log("Started web interface!")
-})
-
-ipcMain.on('reset', (event) => {
-  global.votesA = 0;
-  global.votesB = 0;
-  global.votesC = 0;
-  global.votesD = 0;
-  global.votesE = 0;
-})*/
