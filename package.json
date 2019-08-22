@@ -4,51 +4,48 @@
   "description": "A minimal clicker implementation",
   "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/rbuxton1/clickers",
   "author": "Ryan Buxton",
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.44",
-    "@electron-forge/maker-deb": "^6.0.0-beta.44",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.44",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.44",
-    "@electron-forge/maker-zip": "^6.0.0-beta.44",
-    "electron": "^6.0.2"
+  "build": {
+    "appId": "com.ryanbuxton.clickers",
+    "extraFiles": ["views", "icon.png"],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "icon.png"
+    }
   },
   "dependencies": {
     "ejs": "^2.6.2",
-    "electron-squirrel-startup": "^1.0.0",
     "express": "^4.17.1",
     "ip": "^1.1.5"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Clickers"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
   }
 }
